@@ -12,6 +12,3 @@ export function encodeToLatin1(ct: Ciphertext): string {
 
     return result;
 }
-// 224 232 236 242 249
-// HEX: E0 E8 EC F2 F9
-// àèìòù
