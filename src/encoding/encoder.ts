@@ -12,6 +12,6 @@ export function encode(ct: Ciphertext): string {
         throw new MissingEncodingMetadataError(`The provided ciphertext does not have encoding metadata: ${ct}.`);
     }
 
-    const encoder: Encoder = getEncoder(ct.metadata.encoding.encoding);
+    const encoder: Encoder = getEncoder(ct.metadata.encoding.encoding, ct.metadata.encoding.base);
     return encoder.encode(ct);
 }
