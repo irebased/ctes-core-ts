@@ -1,6 +1,6 @@
 import { Ciphertext, Encoding, EncodingMetadata } from "ctes-models-ts"
-import { encodeToLatin1 } from "../../src/encoding/latin1"
-import { encodeToAscii } from "../../src/encoding/ascii"
+import { Latin1Encoder } from "../../src/encoding/latin1"
+import { AsciiEncoder } from "../../src/encoding/ascii"
 import { EncodingFailedError, InvalidEncodingError } from "../../src/exceptions"
 import { encode } from "../../src/encoding/encoder"
 
@@ -25,6 +25,7 @@ const UNSPECIFIED_ENCODING: EncodingMetadata = {
 }
 
 describe("ASCII encoding tests", () => {
+    const asciiEncoder: AsciiEncoder = new AsciiEncoder();
     it("Correctly encodes valid ASCII", () => {
         const ct: Ciphertext = {
             bytes: Buffer.from("74657374696e67", "hex"),
@@ -34,7 +35,7 @@ describe("ASCII encoding tests", () => {
             }
         }
 
-        expect(encodeToAscii(ct)).toEqual("testing");
+        expect(asciiEncoder.encode(ct)).toEqual("testing");
     });
 
     it("Raises error for invalid ASCII", () => {
@@ -46,7 +47,7 @@ describe("ASCII encoding tests", () => {
             }
         }
 
-        expect(() => encodeToAscii(ct))
+        expect(() => asciiEncoder.encode(ct))
         .toThrow(new EncodingFailedError(
             "One or more bytes in the byte stream contained a value over 127."
         ));
@@ -54,6 +55,7 @@ describe("ASCII encoding tests", () => {
 })
 
 describe("Latin1 encoding tests", () => {
+    const latin1Encoder: Latin1Encoder = new Latin1Encoder();
     it("Correctly encodes high range characters", () => {
         const ct: Ciphertext = {
             bytes: Buffer.from("E0E8ECF2F9", "hex"),
@@ -63,7 +65,7 @@ describe("Latin1 encoding tests", () => {
             }
         }
 
-        expect(encodeToLatin1(ct)).toEqual("àèìòù");
+        expect(latin1Encoder.encode(ct)).toEqual("àèìòù");
     })
 
     it("Correctly encodes text from standard ascii range", () => {
@@ -75,7 +77,7 @@ describe("Latin1 encoding tests", () => {
             }
         }
 
-        expect(encodeToLatin1(ct)).toEqual("testing");
+        expect(latin1Encoder.encode(ct)).toEqual("testing");
     })
 })
 
