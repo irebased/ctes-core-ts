@@ -1,6 +1,6 @@
 import { Ciphertext, Encoding } from "ctes-models-ts";
-import { EncodingFailedError, InvalidEncodingError } from "../exceptions";
-import { Encoder } from "./encoder";
+import { EncodingFailedError, InvalidEncodingError } from "../../exceptions";
+import { Encoder } from "../encoder";
 
 const ALPHABET_36 = "0123456789abcdefghijklmnopqrstuvwxyz";
 const ALPHABET_64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -16,14 +16,10 @@ function assertSupportedBase(base: number) {
 }
 
 function base64Encode(bytes: Uint8Array): string {
-    // Node environment (jest.config.js uses testEnvironment: "node")
     return Buffer.from(bytes).toString("base64");
 }
 
 function isValidBase64(s: string): boolean {
-    // RFC 4648 base64 with optional padding. Also allow empty string.
-    // - length must be multiple of 4
-    // - allowed chars A-Z a-z 0-9 + / and up to two '=' padding at end
     return /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(s);
 }
 
@@ -39,16 +35,13 @@ function getAlphabet(base: number): string {
     return ALPHABET_36.slice(0, base);
 }
 
-// Base-x style conversion (preserves leading zero bytes by prefixing alphabet[0]).
 function baseNEncode(bytes: Uint8Array, base: number): string {
     const alphabet = getAlphabet(base);
     if (bytes.length === 0) return "";
 
-    // Count leading zeros.
     let zeros = 0;
     while (zeros < bytes.length && bytes[zeros] === 0) zeros++;
     if (zeros === bytes.length) {
-        // All zero bytes => preserve exact length.
         return alphabet[0].repeat(zeros);
     }
 
@@ -77,15 +70,12 @@ function baseNDecode(s: string, base: number): Uint8Array {
     const alphabet = getAlphabet(base);
     if (s.length === 0) return new Uint8Array();
 
-    // Map char -> value
     const map = new Map<string, number>();
     for (let i = 0; i < alphabet.length; i++) map.set(alphabet[i], i);
 
-    // Count leading zeros.
     let zeros = 0;
     while (zeros < s.length && s[zeros] === alphabet[0]) zeros++;
     if (zeros === s.length) {
-        // All leading-zero characters => represents all-zero bytes of same length.
         return new Uint8Array(zeros);
     }
 
@@ -110,7 +100,6 @@ function baseNDecode(s: string, base: number): Uint8Array {
     }
 
     const out = new Uint8Array(zeros + bytes.length);
-    // zeros are already 0
     for (let i = 0; i < bytes.length; i++) {
         out[out.length - 1 - i] = bytes[i];
     }

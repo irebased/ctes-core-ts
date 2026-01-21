@@ -1,6 +1,6 @@
 import { Ciphertext, Encoding } from "ctes-models-ts";
-import { Encoder } from "./encoder";
-import { EncodingFailedError } from "../exceptions";
+import { Encoder } from "../encoder";
+import { EncodingFailedError } from "../../exceptions";
 
 
 export class Utf32Encoder implements Encoder {

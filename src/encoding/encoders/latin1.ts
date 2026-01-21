@@ -1,5 +1,5 @@
 import { Ciphertext, Encoding } from "ctes-models-ts";
-import { Encoder } from "./encoder";
+import { Encoder } from "../encoder";
 
 export class Latin1Encoder implements Encoder {
     #encoder;

@@ -1,5 +1,5 @@
 import { Ciphertext, Encoding, EncodingMetadata } from "ctes-models-ts"
-import { Utf8Encoder } from "../../src/encoding/utf8"
+import { Utf8Encoder } from "../../src/encoding/encoders/utf8"
 import { EncodingFailedError } from "../../src/exceptions"
 
 const UTF8_ENCODING: EncodingMetadata = {

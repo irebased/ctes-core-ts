@@ -1,5 +1,5 @@
 import { Ciphertext, Encoding } from "ctes-models-ts";
-import { Encoder } from "./encoder";
+import { Encoder } from "../encoder";
 import { encode as u8ToUtf16Encode, decode as utf16ToU8Decode } from "uint8-to-utf16";
 
 // This encoder uses `uint8-to-utf16` to provide a *lossless* mapping between arbitrary bytes and a JS string.

@@ -1,5 +1,5 @@
 import { Ciphertext, Encoding, EncodingMetadata } from "ctes-models-ts"
-import { Latin1Encoder } from "../../src/encoding/latin1"
+import { Latin1Encoder } from "../../src/encoding/encoders/latin1"
 
 const LATIN1_ENCODING: EncodingMetadata = {
     encoding: Encoding.LATIN1,

@@ -1,12 +1,12 @@
 import { Encoding } from "ctes-models-ts";
-import { AsciiEncoder } from "./ascii";
+import { AsciiEncoder } from "./encoders/ascii";
 import { InvalidEncodingError } from "../exceptions";
 import { getEncodingName } from "./enumToString";
-import { Latin1Encoder } from "./latin1";
-import { Utf32Encoder } from "./utf32";
-import { Utf8Encoder } from "./utf8";
-import { Utf16Encoder } from "./utf16";
-import { BaseConversionEncoder } from "./baseConversion";
+import { Latin1Encoder } from "./encoders/latin1";
+import { Utf32Encoder } from "./encoders/utf32";
+import { Utf8Encoder } from "./encoders/utf8";
+import { Utf16Encoder } from "./encoders/utf16";
+import { BaseConversionEncoder } from "./encoders/baseConversion";
 
 
 export function getEncoder(encoding: Encoding, base?: number) {

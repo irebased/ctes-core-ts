@@ -1,5 +1,5 @@
 import { Ciphertext, Encoding, EncodingMetadata } from "ctes-models-ts"
-import { BaseConversionEncoder } from "../../src/encoding/baseConversion"
+import { BaseConversionEncoder } from "../../src/encoding/encoders/baseConversion"
 import { encode as topLevelEncode } from "../../src/encoding/encoder"
 import { EncodingFailedError, InvalidEncodingError } from "../../src/exceptions"
 
