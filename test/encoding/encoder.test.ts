@@ -1,6 +1,6 @@
 import { Ciphertext, Encoding, EncodingMetadata } from "ctes-models-ts"
 import { EncodingFailedError, InvalidEncodingError, MissingEncodingMetadataError } from "../../src/exceptions"
-import { encode } from "../../src/encoding/encoder"
+import { decode, encode } from "../../src/encoding/encoder"
 import { getEncoder } from "../../src/encoding/encoderFactory"
 import { encode as u8ToUtf16Encode } from "uint8-to-utf16"
 
@@ -27,6 +27,11 @@ const UTF16_ENCODING: EncodingMetadata = {
 const UTF32_ENCODING: EncodingMetadata = {
     encoding: Encoding.UTF32,
     base: 0
+}
+
+const BASE64_ENCODING: EncodingMetadata = {
+    encoding: Encoding.BASE_CONVERSION,
+    base: 64
 }
 
 function toUtf32LEBytes(s: string): Uint8Array {
@@ -121,5 +126,51 @@ describe("Top-level encoder tests", () => {
             metadata: { type: "text", encoding: UTF32_ENCODING }
         }
         expect(encode(ct)).toEqual(s);
+    });
+})
+
+describe("Top-level decoder tests", () => {
+    it("Decodes UTF-8 into Ciphertext bytes + metadata", () => {
+        const s = "Hello 世界! 🌍";
+        const ct = decode(s, UTF8_ENCODING);
+        expect(ct.bytes).toEqual(new TextEncoder().encode(s));
+        expect(ct.metadata?.type).toEqual("text");
+        expect(ct.metadata?.encoding?.encoding).toEqual(Encoding.UTF8);
+    });
+
+    it("Decodes UTF-16 into Ciphertext bytes + metadata", () => {
+        const bytes = Uint8Array.from([0x00, 0xFF, 0x80, 0x7F, 0x41, 0x42, 0x10]);
+        const s = u8ToUtf16Encode(bytes);
+        const ct = decode(s, UTF16_ENCODING);
+        expect(ct.bytes).toEqual(bytes);
+        expect(ct.metadata?.type).toEqual("text");
+        expect(ct.metadata?.encoding?.encoding).toEqual(Encoding.UTF16);
+    });
+
+    it("Decodes UTF-32 into Ciphertext bytes + metadata", () => {
+        const s = "Hello 世界! 🌍";
+        const ct = decode(s, UTF32_ENCODING);
+        expect(ct.bytes).toEqual(toUtf32LEBytes(s));
+        expect(ct.metadata?.type).toEqual("text");
+        expect(ct.metadata?.encoding?.encoding).toEqual(Encoding.UTF32);
+    });
+
+    it("Decodes base64 (base conversion) into Ciphertext bytes + metadata (including base)", () => {
+        const bytes = Uint8Array.from([0, 1, 2, 3, 250, 251, 252, 253, 254, 255]);
+        const s = Buffer.from(bytes).toString("base64");
+        const ct = decode(s, BASE64_ENCODING);
+        expect(ct.bytes).toEqual(bytes);
+        expect(ct.metadata?.type).toEqual("text");
+        expect(ct.metadata?.encoding?.encoding).toEqual(Encoding.BASE_CONVERSION);
+        expect(ct.metadata?.encoding?.base).toEqual(64);
+    });
+
+    it("Throws when BASE_CONVERSION decoding is requested without a base", () => {
+        expect(() => decode("AA==", { encoding: Encoding.BASE_CONVERSION } as unknown as EncodingMetadata))
+            .toThrow(new InvalidEncodingError("A base value was expected but not provided."));
+    });
+
+    it("Throws EncodingFailedError on invalid base64 input", () => {
+        expect(() => decode("%%%", BASE64_ENCODING)).toThrow(EncodingFailedError);
     });
 })
