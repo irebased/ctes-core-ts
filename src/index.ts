@@ -1,4 +1,4 @@
-import { decode, encode, getEncodingName } from "./encoding";
+import { decode, encode, getEncodingName, toEncoding } from "./encoding";
 import {
     MissingEncodingMetadataError,
     InvalidEncodingError,
@@ -9,6 +9,7 @@ import {
 export {
     encode,
     decode,
+    toEncoding,
     getEncodingName
 }
 

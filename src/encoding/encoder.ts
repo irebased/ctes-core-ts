@@ -20,3 +20,16 @@ export function decode(s: string, encoding: EncodingMetadata): Ciphertext {
     const encoder: Encoder = getEncoder(encoding.encoding, encoding.base);
     return encoder.decode(s);
 }
+
+export function toEncoding(ct: Ciphertext, targetEncoding: EncodingMetadata): Ciphertext {
+    const encoder: Encoder = getEncoder(targetEncoding.encoding, targetEncoding.base);
+    encoder.encode(ct);
+
+    return {
+        bytes: ct.bytes,
+        metadata: {
+            type: "text",
+            encoding: targetEncoding
+        }
+    };
+}
