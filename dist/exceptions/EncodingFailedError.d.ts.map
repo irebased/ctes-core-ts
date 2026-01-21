@@ -1,1 +1,0 @@
-{"version":3,"file":"EncodingFailedError.d.ts","sourceRoot":"","sources":["../../src/exceptions/EncodingFailedError.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,aAAa,EAAE,MAAM,iBAAiB,CAAC;AAEhD,qBAAa,mBAAoB,SAAQ,aAAa;gBACxC,OAAO,EAAE,MAAM;CAK5B"}
