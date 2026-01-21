@@ -1,0 +1,1 @@
+{"version":3,"file":"utf16.d.ts","sourceRoot":"","sources":["../../../src/encoding/encoders/utf16.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAY,MAAM,gBAAgB,CAAC;AACtD,OAAO,EAAE,OAAO,EAAE,MAAM,YAAY,CAAC;AAKrC,qBAAa,YAAa,YAAW,OAAO;;IAGxC,MAAM,CAAC,EAAE,EAAE,UAAU,GAAG,MAAM;IAI9B,MAAM,CAAC,CAAC,EAAE,MAAM,GAAG,UAAU;CAShC"}

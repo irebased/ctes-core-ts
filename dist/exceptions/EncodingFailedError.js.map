@@ -1,0 +1,1 @@
+{"version":3,"file":"EncodingFailedError.js","sourceRoot":"","sources":["../../src/exceptions/EncodingFailedError.ts"],"names":[],"mappings":";;;AAAA,mDAAgD;AAEhD,MAAa,mBAAoB,SAAQ,6BAAa;IACpD,YAAY,OAAe;QACzB,KAAK,CAAC,OAAO,CAAC,CAAC;QACf,IAAI,CAAC,IAAI,GAAG,qBAAqB,CAAC;QAClC,MAAM,CAAC,cAAc,CAAC,IAAI,EAAE,mBAAmB,CAAC,SAAS,CAAC,CAAC;IAC7D,CAAC;CACF;AAND,kDAMC"}

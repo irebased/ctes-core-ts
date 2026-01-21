@@ -1,0 +1,1 @@
+{"version":3,"file":"latin1.d.ts","sourceRoot":"","sources":["../../../src/encoding/encoders/latin1.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAY,MAAM,gBAAgB,CAAC;AACtD,OAAO,EAAE,OAAO,EAAE,MAAM,YAAY,CAAC;AAErC,qBAAa,aAAc,YAAW,OAAO;;;IAUzC,MAAM,CAAC,EAAE,EAAE,UAAU,GAAG,MAAM;IAS9B,MAAM,CAAC,CAAC,EAAE,MAAM,GAAI,UAAU;CASjC"}

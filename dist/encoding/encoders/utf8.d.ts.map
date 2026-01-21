@@ -1,0 +1,1 @@
+{"version":3,"file":"utf8.d.ts","sourceRoot":"","sources":["../../../src/encoding/encoders/utf8.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAY,MAAM,gBAAgB,CAAC;AAEtD,OAAO,EAAE,OAAO,EAAE,MAAM,YAAY,CAAC;AAErC,qBAAa,WAAY,YAAW,OAAO;;;IASvC,MAAM,CAAC,EAAE,EAAE,UAAU,GAAG,MAAM;IAQ9B,MAAM,CAAC,CAAC,EAAE,MAAM,GAAG,UAAU;CAShC"}

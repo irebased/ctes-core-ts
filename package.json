@@ -4,7 +4,20 @@
     "description": "Core utilities for the Ciphertext Ecosystem.",
     "author": "irebased <rebased.again@gmail.com>",
     "license": "MIT",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist"
+    ],
     "scripts": {
+        "build": "tsc",
+        "prepublishOnly": "npm run build",
         "test": "jest",
         "test:coverage": "jest --coverage",
         "test:watch": "jest --watchAll"
@@ -15,6 +28,7 @@
     },
     "devDependencies": {
         "@types/jest": "^30.0.0",
-        "ts-jest": "^29.1.5"
+        "ts-jest": "^29.1.5",
+        "typescript": "^5.7.3"
     }
 }

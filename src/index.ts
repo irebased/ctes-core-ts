@@ -1,4 +1,4 @@
-import { encode, getEncodingName } from "./encoding";
+import { decode, encode, getEncodingName } from "./encoding";
 import {
     MissingEncodingMetadataError,
     InvalidEncodingError,
@@ -8,6 +8,7 @@ import {
 // Functions
 export {
     encode,
+    decode,
     getEncodingName
 }
 
