@@ -24,7 +24,10 @@ describe("UTF-8 encoding tests", () => {
 
     it.each(cases)("$name: decode produces expected UTF-8 bytes", ({ s }) => {
         // TextEncoder is UTF-8 by definition.
-        expect(utf8Encoder.decode(s)).toEqual(new TextEncoder().encode(s));
+        const ct = utf8Encoder.decode(s);
+        expect(ct.bytes).toEqual(new TextEncoder().encode(s));
+        expect(ct.metadata?.type).toEqual("text");
+        expect(ct.metadata?.encoding?.encoding).toEqual(Encoding.UTF8);
     });
 
     it.each(cases)("$name: encode round-trips back to original string", ({ s }) => {

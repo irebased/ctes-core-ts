@@ -34,8 +34,8 @@ describe("UTF-32 encoding tests", () => {
     });
 
     it("Correctly decodes valid UTF-32", () => {
-        const result = utf32Encoder.decode("Hello 世界! 🌍");
-        expect(result).toEqual(Uint8Array.from([
+        const ct = utf32Encoder.decode("Hello 世界! 🌍");
+        expect(ct.bytes).toEqual(Uint8Array.from([
             72, 0, 0, 0, 101, 0, 0, 0,
             108, 0, 0, 0, 108, 0, 0, 0,
             111, 0, 0, 0, 32, 0, 0, 0,
@@ -43,6 +43,8 @@ describe("UTF-32 encoding tests", () => {
             33, 0, 0, 0, 32, 0, 0, 0,
             13, 243, 1, 0
         ]));
+        expect(ct.metadata?.type).toEqual("text");
+        expect(ct.metadata?.encoding?.encoding).toEqual(Encoding.UTF32);
     });
 
     describe("Round-trip UTF-32 encode/decode over diverse inputs", () => {
@@ -66,7 +68,7 @@ describe("UTF-32 encoding tests", () => {
         ];
 
         it.each(cases)("$name: decode matches expected UTF-32LE bytes", ({ s }) => {
-            expect(utf32Encoder.decode(s)).toEqual(toUtf32LEBytes(s));
+            expect(utf32Encoder.decode(s).bytes).toEqual(toUtf32LEBytes(s));
         });
 
         it.each(cases)("$name: encode(expectedBytes) reconstructs original string", ({ s }) => {

@@ -1,4 +1,4 @@
-import { Ciphertext } from "ctes-models-ts";
+import { Ciphertext, Encoding } from "ctes-models-ts";
 import { EncodingFailedError, InvalidEncodingError } from "../exceptions";
 import { Encoder } from "./encoder";
 
@@ -131,9 +131,15 @@ export class BaseConversionEncoder implements Encoder {
         return baseNEncode(bytes, this.#base);
     }
 
-    decode(s: string): Uint8Array {
-        if (this.#base === 64) return base64Decode(s);
-        return baseNDecode(s, this.#base);
+    decode(s: string): Ciphertext {
+        const bytes = (this.#base === 64) ? base64Decode(s) : baseNDecode(s, this.#base);
+        return {
+            bytes,
+            metadata: {
+                type: "text",
+                encoding: { encoding: Encoding.BASE_CONVERSION, base: this.#base }
+            }
+        };
     }
 }
 

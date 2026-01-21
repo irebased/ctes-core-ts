@@ -1,4 +1,4 @@
-import { Ciphertext } from "ctes-models-ts";
+import { Ciphertext, Encoding } from "ctes-models-ts";
 import { EncodingFailedError } from "../exceptions";
 import { Encoder } from "./encoder";
 
@@ -18,7 +18,13 @@ export class AsciiEncoder implements Encoder {
         return this.#decoder.decode(ct.bytes);
     }
 
-    decode(s: string) : Uint8Array {
-        return this.#encoder.encode(s)
+    decode(s: string) : Ciphertext {
+        return {
+            bytes: this.#encoder.encode(s),
+            metadata: {
+                type: "text",
+                encoding: { encoding: Encoding.ASCII, base: 0 }
+            }
+        };
     }
 }

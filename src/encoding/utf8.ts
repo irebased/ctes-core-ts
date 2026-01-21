@@ -1,4 +1,4 @@
-import { Ciphertext } from "ctes-models-ts";
+import { Ciphertext, Encoding } from "ctes-models-ts";
 import { EncodingFailedError } from "../exceptions";
 import { Encoder } from "./encoder";
 
@@ -8,7 +8,6 @@ export class Utf8Encoder implements Encoder {
 
     constructor() {
         this.#encoder = new TextEncoder();
-        // fatal=true ensures invalid UTF-8 sequences throw instead of being replaced.
         this.#decoder = new TextDecoder("utf-8", { fatal: true });
     }
 
@@ -20,8 +19,14 @@ export class Utf8Encoder implements Encoder {
         }
     }
 
-    decode(s: string): Uint8Array {
-        return this.#encoder.encode(s);
+    decode(s: string): Ciphertext {
+        return {
+            bytes: this.#encoder.encode(s),
+            metadata: {
+                type: "text",
+                encoding: { encoding: Encoding.UTF8, base: 0 }
+            }
+        };
     }
 }
 

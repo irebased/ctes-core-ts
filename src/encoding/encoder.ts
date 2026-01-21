@@ -1,10 +1,10 @@
-import { Ciphertext } from "ctes-models-ts";
+import { Ciphertext, EncodingMetadata } from "ctes-models-ts";
 import { MissingEncodingMetadataError } from "../exceptions";
 import { getEncoder } from "./encoderFactory";
 
 export interface Encoder {
     encode: (ct: Ciphertext) => string;
-    decode: (s: string) => Uint8Array;
+    decode: (s: string) => Ciphertext;
 }
 
 export function encode(ct: Ciphertext): string {
@@ -14,4 +14,9 @@ export function encode(ct: Ciphertext): string {
 
     const encoder: Encoder = getEncoder(ct.metadata.encoding.encoding, ct.metadata.encoding.base);
     return encoder.encode(ct);
+}
+
+export function decode(s: string, encoding: EncodingMetadata): Ciphertext {
+    const encoder: Encoder = getEncoder(encoding.encoding, encoding.base);
+    return encoder.decode(s);
 }

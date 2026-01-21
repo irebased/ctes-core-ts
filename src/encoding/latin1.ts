@@ -1,4 +1,4 @@
-import { Ciphertext } from "ctes-models-ts";
+import { Ciphertext, Encoding } from "ctes-models-ts";
 import { Encoder } from "./encoder";
 
 export class Latin1Encoder implements Encoder {
@@ -20,7 +20,13 @@ export class Latin1Encoder implements Encoder {
         return result;
     }
 
-    decode(s: string) : Uint8Array {
-        return this.#encoder.encode(s)
+    decode(s: string) : Ciphertext {
+        return {
+            bytes: this.#encoder.encode(s),
+            metadata: {
+                type: "text",
+                encoding: { encoding: Encoding.LATIN1, base: 0 }
+            }
+        };
     }
 }

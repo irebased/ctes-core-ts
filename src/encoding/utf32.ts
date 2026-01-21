@@ -1,4 +1,4 @@
-import { Ciphertext } from "ctes-models-ts";
+import { Ciphertext, Encoding } from "ctes-models-ts";
 import { Encoder } from "./encoder";
 import { EncodingFailedError } from "../exceptions";
 
@@ -27,7 +27,7 @@ export class Utf32Encoder implements Encoder {
         return result;
     }
 
-    decode(s: string): Uint8Array {
+    decode(s: string): Ciphertext {
         // Convert a JS string (UTF-16) into UTF-32 code points, then serialize as UTF-32LE bytes.
         // `for...of` iterates Unicode code points (handles surrogate pairs correctly).
         const codePoints = Array.from(s, (ch) => ch.codePointAt(0)!);
@@ -41,6 +41,12 @@ export class Utf32Encoder implements Encoder {
             view.setUint32(i * 4, cp, true /* littleEndian */);
         }
 
-        return bytes;
+        return {
+            bytes,
+            metadata: {
+                type: "text",
+                encoding: { encoding: Encoding.UTF32, base: 0 }
+            }
+        };
     }
 }

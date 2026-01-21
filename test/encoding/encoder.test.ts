@@ -1,6 +1,8 @@
 import { Ciphertext, Encoding, EncodingMetadata } from "ctes-models-ts"
 import { EncodingFailedError, InvalidEncodingError, MissingEncodingMetadataError } from "../../src/exceptions"
 import { encode } from "../../src/encoding/encoder"
+import { getEncoder } from "../../src/encoding/encoderFactory"
+import { encode as u8ToUtf16Encode } from "uint8-to-utf16"
 
 const INVALID_ENCODING: EncodingMetadata = {
     encoding: Encoding.UNRECOGNIZED,
@@ -103,8 +105,13 @@ describe("Top-level encoder tests", () => {
             bytes: Buffer.from(bytes),
             metadata: { type: "text", encoding: UTF16_ENCODING }
         }
-        // We only assert routing and deterministic output here (the external dependency may not be installed yet).
-        expect(encode(ct)).toEqual(String.fromCharCode(...bytes));
+        // Assert routing + lossless round-trip (implementation may vary depending on whether uint8-to-utf16 is installed).
+        const s = encode(ct);
+        expect(s).toEqual(u8ToUtf16Encode(bytes));
+        const utf16 = getEncoder(Encoding.UTF16) as any;
+        const decoded = utf16.decode(s) as Ciphertext;
+        expect(decoded.bytes).toEqual(bytes);
+        expect(decoded.metadata?.encoding?.encoding).toEqual(Encoding.UTF16);
     });
 
     it("Uses the UTF-32 (LE) encoder when encoding metadata is UTF32", () => {

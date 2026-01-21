@@ -18,28 +18,34 @@ describe("Base conversion encoder tests", () => {
     it.each([2, 3, 8, 10, 16, 32, 36])("Round-trips bytes for base %i", (base) => {
         const enc = new BaseConversionEncoder(base);
         const s = enc.encode({ bytes: sampleBytes } as unknown as Ciphertext);
-        expect(enc.decode(s)).toEqual(sampleBytes);
+        const ct = enc.decode(s);
+        expect(ct.bytes).toEqual(sampleBytes);
+        expect(ct.metadata?.type).toEqual("text");
+        expect(ct.metadata?.encoding?.encoding).toEqual(Encoding.BASE_CONVERSION);
+        expect(ct.metadata?.encoding?.base).toEqual(base);
     });
 
     it("Preserves leading zero bytes for base 2..36 (via leading '0' chars)", () => {
         const enc = new BaseConversionEncoder(36);
         const s = enc.encode({ bytes: sampleBytes } as unknown as Ciphertext);
         expect(s.startsWith("00")).toBe(true);
-        expect(enc.decode(s)).toEqual(sampleBytes);
+        expect(enc.decode(s).bytes).toEqual(sampleBytes);
     });
 
     it("All-zero byte arrays round-trip without changing length (base 2..36)", () => {
         const enc = new BaseConversionEncoder(36);
         const s = enc.encode({ bytes: allZeroBytes } as unknown as Ciphertext);
         expect(s).toEqual("0000");
-        expect(enc.decode(s)).toEqual(allZeroBytes);
+        expect(enc.decode(s).bytes).toEqual(allZeroBytes);
     });
 
     it("Base64 encoding matches Node's base64 and round-trips", () => {
         const enc = new BaseConversionEncoder(64);
         const s = enc.encode({ bytes: sampleBytes } as unknown as Ciphertext);
         expect(s).toEqual(Buffer.from(sampleBytes).toString("base64"));
-        expect(enc.decode(s)).toEqual(sampleBytes);
+        const ct = enc.decode(s);
+        expect(ct.bytes).toEqual(sampleBytes);
+        expect(ct.metadata?.encoding?.base).toEqual(64);
     });
 
     it("Top-level encode routes BASE_CONVERSION and uses metadata.base", () => {
