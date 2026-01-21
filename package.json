@@ -1,6 +1,6 @@
 {
     "name": "ctes-core",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Core utilities for the Ciphertext Ecosystem.",
     "author": "irebased <rebased.again@gmail.com>",
     "license": "MIT",
