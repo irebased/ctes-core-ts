@@ -1,5 +1,5 @@
 import { Ciphertext, Encoding, EncodingMetadata } from "ctes-models-ts"
-import { InvalidEncodingError, MissingEncodingMetadataError } from "../../src/exceptions"
+import { EncodingFailedError, InvalidEncodingError, MissingEncodingMetadataError } from "../../src/exceptions"
 import { encode } from "../../src/encoding/encoder"
 
 const INVALID_ENCODING: EncodingMetadata = {
@@ -10,6 +10,31 @@ const INVALID_ENCODING: EncodingMetadata = {
 const UNSPECIFIED_ENCODING: EncodingMetadata = {
     encoding: Encoding.ENCODING_UNSPECIFIED,
     base: 0
+}
+
+const UTF8_ENCODING: EncodingMetadata = {
+    encoding: Encoding.UTF8,
+    base: 0
+}
+
+const UTF16_ENCODING: EncodingMetadata = {
+    encoding: Encoding.UTF16,
+    base: 0
+}
+
+const UTF32_ENCODING: EncodingMetadata = {
+    encoding: Encoding.UTF32,
+    base: 0
+}
+
+function toUtf32LEBytes(s: string): Uint8Array {
+    const codePoints = Array.from(s, (ch) => ch.codePointAt(0)!);
+    const bytes = new Uint8Array(codePoints.length * 4);
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    for (let i = 0; i < codePoints.length; i++) {
+        view.setUint32(i * 4, codePoints[i], true);
+    }
+    return bytes;
 }
 
 describe("Top-level encoder tests", () => {
@@ -53,4 +78,41 @@ describe("Top-level encoder tests", () => {
 
         expect(() => encode(ct)).toThrow(new InvalidEncodingError("Encoding unspecified."));
     })
+
+    it("Uses the UTF-8 encoder when encoding metadata is UTF8", () => {
+        const s = "Hello 世界! 🌍";
+        const ct: Ciphertext = {
+            bytes: Buffer.from(s, "utf8"),
+            metadata: { type: "text", encoding: UTF8_ENCODING }
+        }
+        expect(encode(ct)).toEqual(s);
+    });
+
+    it("Propagates UTF-8 decoding failures as EncodingFailedError", () => {
+        const ct = {
+            bytes: Uint8Array.from([0xC0, 0xAF]), // invalid (overlong)
+            metadata: { type: "text", encoding: UTF8_ENCODING }
+        } as unknown as Ciphertext;
+
+        expect(() => encode(ct)).toThrow(EncodingFailedError);
+    });
+
+    it("Uses the UTF-16 (LE) encoder when encoding metadata is UTF16", () => {
+        const bytes = Uint8Array.from([0x00, 0xFF, 0x80, 0x7F, 0x41, 0x42, 0x10]);
+        const ct: Ciphertext = {
+            bytes: Buffer.from(bytes),
+            metadata: { type: "text", encoding: UTF16_ENCODING }
+        }
+        // We only assert routing and deterministic output here (the external dependency may not be installed yet).
+        expect(encode(ct)).toEqual(String.fromCharCode(...bytes));
+    });
+
+    it("Uses the UTF-32 (LE) encoder when encoding metadata is UTF32", () => {
+        const s = "Hello 世界! 🌍";
+        const ct: Ciphertext = {
+            bytes: Buffer.from(toUtf32LEBytes(s)),
+            metadata: { type: "text", encoding: UTF32_ENCODING }
+        }
+        expect(encode(ct)).toEqual(s);
+    });
 })

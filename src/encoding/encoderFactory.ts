@@ -4,6 +4,8 @@ import { InvalidEncodingError } from "../exceptions";
 import { getEncodingName } from "./enumToString";
 import { Latin1Encoder } from "./latin1";
 import { Utf32Encoder } from "./utf32";
+import { Utf8Encoder } from "./utf8";
+import { Utf16Encoder } from "./utf16";
 
 
 export function getEncoder(encoding: Encoding, base?: number) {
@@ -17,12 +19,9 @@ export function getEncoder(encoding: Encoding, base?: number) {
             // NOTE: This must pass in the base value from the encoding metadata.
             throw new InvalidEncodingError("Base conversion encoder not implemented.");
         case Encoding.UTF8:
-            // TODO: Implement UTF-8 encoder which implements the encoder interface.
-            throw new InvalidEncodingError("UTF-8 encoder not implemented.");
+            return new Utf8Encoder();
         case Encoding.UTF16:
-            // TODO: Implement UTF-16 encoder which implements the encoder interface.
-            // USE: https://github.com/WebReflection/uint8-to-utf16
-            throw new InvalidEncodingError("UTF-16 encoder not implemented.");
+            return new Utf16Encoder();
         case Encoding.UTF32:
             return new Utf32Encoder();
         case Encoding.ENCODING_UNSPECIFIED:

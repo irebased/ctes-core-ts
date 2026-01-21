@@ -10,7 +10,8 @@
         "test:watch": "jest --watchAll"
     },
     "dependencies": {
-        "ctes-models-ts": "^0.1.0"
+        "ctes-models-ts": "^0.1.0",
+        "uint8-to-utf16": "github:WebReflection/uint8-to-utf16"
     },
     "devDependencies": {
         "@types/jest": "^30.0.0",
